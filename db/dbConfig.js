@@ -1,7 +1,7 @@
 const mysql2 = require("mysql2");
 const dbConnection = mysql2.createPool({
   user: "evangadi-admin",
-  database: "evangadi forum",
+  database: "evangadi-forum",
   host: "localhost",
   password: "123456",
   connectionLimit: 10,
