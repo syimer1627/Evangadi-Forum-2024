@@ -1,9 +1,14 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-// Authentication middleware
-const authMiddleware = require("../middleware/authMiddleware");
+const {
+  postQuestions,
+  allQuestions,
+  singleQuestions,
+} = require("../controller/questionController");
 
-router.get("/all-questions",authMiddleware,(res,req) =>{
-    res.setEncoding("all questions")
-})
-module.exports=router
+// Routes for questions
+router.post("/post-question", postQuestions);
+router.get("/all-questions", allQuestions);
+router.get("/question/:questionid", singleQuestions);
+
+module.exports = router;
