@@ -1,19 +1,18 @@
 const express = require("express");
 const router = express.Router();
+// import user controller 
+const {register,login,checkUser}= require("../controller/userController")
 
-// userController
-const { register, login, checkUser } = require("../controller/userController");
 
-//authentication middleware
-const authMiddleware = require("../middleware/authMiddleware")
+// Register route
+router.post("/register",register);
 
-// register route
-router.post("/register", register);
+// Login route
 
-// login user
-router.post("/login", login);
+router.post("/login",login);
 
 // check user
-router.get("/check", authMiddleware ,checkUser);
+
+router.get("/check", checkUser);
 
 module.exports = router;
