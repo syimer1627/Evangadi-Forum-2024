@@ -13,10 +13,10 @@ async function register(req, res) {
  }
  try {
    const [user] = await dbConnection.query(
-     "select username,userid from users where username =? or email =?",
+     "SELECT username,userid from users where username =? or email =?",
      [username, email]
    );
-  //  res.json({user: user})
+  // res.json({user: user})
    console.log(user);
    if (user.length > 0) {
      return res
@@ -36,7 +36,7 @@ async function register(req, res) {
      "INSERT INTO users(username, firstname, lastname,email,password) VALUES(? ,?, ?, ?, ?)",
      [username, firstname, lastname, email, hashedPassword]
    );
-   return res.status(StatusCodes.CREATED).json({ msg: "user relisted" });
+   return res.status(StatusCodes.CREATED).json({ msg: "user registered" });
  } catch (error) {
    console.log(error.message);
    return res
@@ -74,7 +74,7 @@ async function login(req, res) {
     
     const username = user[0].username;
     const userid = user[0].userid;
-    const token = jwt.sign({ username, userid }, "secret", {
+    const token = jwt.sign({ username, userid }, process.env.JWT_SECRET, {
       expiresIn: "1d",
     });
 
