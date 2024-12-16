@@ -1,49 +1,77 @@
-const dbconnection = require("../db/dbConfig");
 const { StatusCodes } = require("http-status-codes");
+const dbConnection = require("../db/dbConfig");
+const { v4: uuidv4 } = require("uuid");
 
+//post questions function
+async function askQuestion(req, res) {
+  // const userid = req.user.userid;
+  // const questionid = uuidv4();
+  req.body.questionid = uuidv4();
+  const { questionid, userid, title, description, tag } = req.body;
+  if (!title || !description) {
+    return res
+      .status(StatusCodes.BAD_REQUEST)
+      .json({ msg: "please provide all questions properties" });
+  }
+
+  try {
+    await dbConnection.query(
+      "INSERT INTO questions(questionid, userid, title, description, tag) VALUES (?, ?, ?, ?, ?)",
+      [questionid, userid, title, description, tag]
+    );
+    return res.status(StatusCodes.CREATED).json({
+      msg: "Question posted successfully. Redirecting to home page.",
+    });
+  } catch (error) {
+    console.log(error.message);
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ msg: "something went wrong try again later" });
+  }
+}
+
+//all questions function
 async function getAllQuestions(req, res) {
-    try {
-        const [questions] = await dbconnection.query("SELECT * FROM questions");
-        return res.status(StatusCodes.OK).json({ questions });
-    } catch (error) {
-        console.error(error.message);
-        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ msg: "Failed to fetch questions" });
-    }
+  try {
+    //query all questions from the questions database
+    const [allQuestion] = await dbConnection.query(
+      "SELECT q.title, q.description, q.questionid ,q.tag ,u.username  FROM questions q JOIN users u ON q.userid = u.userid ORDER BY id DESC;"
+    );
+    return res.status(StatusCodes.OK).json({ allQuestion });
+  } catch (error) {
+    // Log and return a 500 internal server error response if an error occurs
+    // console.log(error.message);
+    res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ msg: "Something went wrong, please try again" });
+  }
 }
 
-async function getQuestionById(req, res) {
-    const { id } = req.params;
+//single questions function
+async function getSingleQuestion(req, res) {
+  const questionid = req.params.questionid;
 
-    try {
-        const [question] = await dbconnection.query("SELECT * FROM questions WHERE question_id = ?", [id]);
-        if (question.length === 0) {
-            return res.status(StatusCodes.NOT_FOUND).json({ msg: "Question not found" });
-        }
-        return res.status(StatusCodes.OK).json({ question: question[0] });
-    } catch (error) {
-        console.error(error.message);
-        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ msg: "Failed to fetch the question" });
+  try {
+    // Perform a SELECT query to fetch a single question by its ID
+    const query = "SELECT * FROM questions WHERE questionid = ?";
+    const question = await dbConnection.query(query, [questionid]);
+    // console.log(query)
+    // console.log(question[0]);
+
+    if (question.length === 0) {
+      return res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ msg: "Question not found" });
     }
+    // Send the retrieved question as a JSON response
+    res.status(200).json(question[0]);
+  } catch (error) {
+    console.log(error);
+    res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ msg: "Something went wrong while fetching the question" });
+  }
 }
 
-async function createQuestion(req, res) {
-    const { title, description } = req.body;
-    const userId = req.user.userid;
+module.exports = { postQuestions, allQuestions, singleQuestions };
 
-    if (!title || !description) {
-        return res.status(StatusCodes.BAD_REQUEST).json({ msg: "Please provide title and description" });
-    }
-
-    try {
-        await dbconnection.query(
-            "INSERT INTO questions (title, description, user_id) VALUES (?, ?, ?)",
-            [title, description, userId]
-        );
-        return res.status(StatusCodes.CREATED).json({ msg: "Question created successfully" });
-    } catch (error) {
-        console.error(error.message);
-        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ msg: "Failed to create the question" });
-    }
-}
-
-module.exports = { getAllQuestions, getQuestionById, createQuestion };
