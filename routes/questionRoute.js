@@ -9,7 +9,7 @@ const {
 // Routes for questions
 router.post("/", askQuestion);
 router.get("/", getAllQuestions);
-router.get("/:question_id", getSingleQuestion);
+router.get("/:question_id", getSingleQuestions);
 
 module.exports = router;
 

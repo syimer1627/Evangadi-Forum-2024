@@ -1,4 +1,3 @@
-// db connection
 const dbConnection = require("../db/dbConfig");
 const bcrypt = require("bcrypt");
 const { StatusCodes } = require("http-status-codes");
@@ -45,13 +44,13 @@ async function register(req, res) {
  }
 }
 
-
 async function login(req, res) {
   const { email, password } = req.body;
   if (!email || !password) {
-    return res
-      .status(StatusCodes.BAD_REQUEST)
-      .json({ msg: "please enter all required fields!" });
+    return res.status(StatusCodes.BAD_REQUEST).json({
+      error: "Bad Request",
+      message: "Please provide all required fields",
+    });
   }
   try {
     const [user] = await dbConnection.query(
@@ -60,18 +59,20 @@ async function login(req, res) {
     );
     // return res.json({user: user})
     if (user.length == 0) {
-      return res
-        .status(StatusCodes.BAD_REQUEST)
-        .json({ msg: "invalid credential!" });
+      return res.status(StatusCodes.BAD_REQUEST).json({
+        error: "Unauthorized",
+        message: "Invalid username or password",
+      });
     }
     // //compare password
     const isMatch = await bcrypt.compare(password, user[0].password);
     if (!isMatch) {
-      return res
-        .status(StatusCodes.BAD_REQUEST)
-        .json({ msg: "invalid credential!" });
+      return res.status(StatusCodes.BAD_REQUEST).json({
+        error: "Unauthorized",
+        message: "Invalid username or password",
+      });
     }
-    
+
     const username = user[0].username;
     const userid = user[0].userid;
     const token = jwt.sign({ username, userid }, process.env.JWT_SECRET, {
@@ -80,21 +81,24 @@ async function login(req, res) {
 
     return res
       .status(StatusCodes.OK)
-      .json({ msg: "user login successful", token, username });
+      .json({ message: "User login successful", token: token });
   } catch (error) {
     console.log(error.message);
-    return res
-      .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .json({ msg: "something went wrong, try again later!" });
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      error: "Internal Server Error",
+      message: "An unexpected error occurred.",
+    });
   }
 }
 
-
 async function checkUser(req, res) {
-  const username = req.user.username;
-  const userid = req.user.userid;
-  // console.log(userid);
-  res.status(StatusCodes.OK).json({ msg: "valid user", username, userid });
+  const { userid, username } = req.user;
+
+  res.status(200).json({
+    message: "Valid user",
+    username: username,
+    userid: userid,
+  });
 }
 
 module.exports = { register, login, checkUser };
