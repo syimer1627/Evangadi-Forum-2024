@@ -1,9 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const {
-  postQuestions,
-  allQuestions,
-  singleQuestions,
+  askQuestion,
+  getAllQuestions,
+  getSingleQuestions,
 } = require("../controller/questionController");
 
 // Routes for questions
@@ -12,3 +12,4 @@ router.get("/", getAllQuestions);
 router.get("/:question_id", getSingleQuestion);
 
 module.exports = router;
+

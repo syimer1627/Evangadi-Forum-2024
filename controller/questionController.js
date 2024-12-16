@@ -1,7 +1,6 @@
 const { StatusCodes } = require("http-status-codes");
 const dbConnection = require("../db/dbConfig");
 const { v4: uuidv4 } = require("uuid");
-
 //post questions function
 async function askQuestion(req, res) {
   // const userid = req.user.userid;
@@ -71,7 +70,8 @@ async function getSingleQuestion(req, res) {
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .json({ msg: "Something went wrong while fetching the question" });
   }
-}
+
 
 module.exports = { postQuestions, allQuestions, singleQuestions };
+
 

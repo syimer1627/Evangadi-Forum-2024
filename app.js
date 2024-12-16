@@ -12,7 +12,7 @@ const authMiddleware = require("./middleware/authMiddleware");
 const UserRoutes = require("./routes/userRoute");
 
 //do questions middleware
-const questionsRoutes = require("./routes/");
+const questionsRoutes = require("./routes/questionRoute");
 // answers middleware
 const answersRoutes = require("./routes/answerRoute");
 //json middleware to extract json data
@@ -39,4 +39,5 @@ async function start() {
   }
 }
 start();
+
 
