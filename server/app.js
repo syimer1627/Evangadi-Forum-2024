@@ -1,6 +1,4 @@
-require("dotenv").config();
 const express = require("express");
-
 const app = express();
 const port = 5550;
 
@@ -21,7 +19,7 @@ const answersRoutes = require("./routes/answerRoute");
 app.use(express.json());
 
 // user route middleware
-app.use("/api/users", authMiddleware, UserRoutes);
+app.use("/api/users", UserRoutes);
 //questions routes middleware
 app.use("/api/questions", authMiddleware, questionsRoutes);
 
@@ -40,5 +38,3 @@ async function start() {
   }
 }
 start();
-
-
