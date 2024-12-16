@@ -7,8 +7,8 @@ const {
 } = require("../controller/questionController");
 
 // Routes for questions
-router.post("/post-question", postQuestions);
-router.get("/all-questions", allQuestions);
-router.get("/question/:questionid", singleQuestions);
+router.post("/", askQuestion);
+router.get("/", getAllQuestions);
+router.get("/:question_id", getSingleQuestion);
 
 module.exports = router;

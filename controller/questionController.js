@@ -3,7 +3,7 @@ const dbConnection = require("../db/dbConfig");
 const { v4: uuidv4 } = require("uuid");
 
 //post questions function
-async function postQuestions(req, res) {
+async function askQuestion(req, res) {
   // const userid = req.user.userid;
   // const questionid = uuidv4();
   req.body.questionid = uuidv4();
@@ -31,7 +31,7 @@ async function postQuestions(req, res) {
 }
 
 //all questions function
-async function allQuestions(req, res) {
+async function getAllQuestions(req, res) {
   try {
     //query all questions from the questions database
     const [allQuestion] = await dbConnection.query(
@@ -48,7 +48,7 @@ async function allQuestions(req, res) {
 }
 
 //single questions function
-async function singleQuestions(req, res) {
+async function getSingleQuestion(req, res) {
   const questionid = req.params.questionid;
 
   try {
@@ -74,3 +74,4 @@ async function singleQuestions(req, res) {
 }
 
 module.exports = { postQuestions, allQuestions, singleQuestions };
+

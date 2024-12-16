@@ -12,7 +12,7 @@ const authMiddleware = require("./middleware/authMiddleware");
 const UserRoutes = require("./routes/userRoute");
 
 //do questions middleware
-const questionsRoutes = require("./routes/questionRoute");
+const questionsRoutes = require("./routes/");
 // answers middleware
 const answersRoutes = require("./routes/answerRoute");
 //json middleware to extract json data
