@@ -1,20 +1,15 @@
 const express = require("express");
-const router = express.Router();
-
-// Import controller functions
 const {
   postAnswer,
-  allAnswers,
-  singleAnswer,
+  getAnswersForQuestion,
 } = require("../controller/answerController");
+const authMiddleware = require("../middleware/authMiddleware");
+const router = express.Router();
 
-// Route to post an answer (POST)
-router.post("/post-answer", postAnswer);
+// Post an answer for a specific question
+router.post("/", authMiddleware, postAnswer);
 
-// Route to get all answers for a specific question (GET)
-router.get("/:questionid", allAnswers);
-
-// Route to get a single answer by its ID (GET)
-router.get("/single/:answerid", singleAnswer);
+// Get all answers for a specific question
+router.get("/:question_id", authMiddleware, getAnswersForQuestion);
 
 module.exports = router;
