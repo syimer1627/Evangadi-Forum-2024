@@ -30,11 +30,11 @@ async function postAnswer(req, res) {
 }
 
 async function getAnswersForQuestion(req, res) {
-  const questionid = req.params.question_id;
+  const { questionid } = req.params;
 
   try {
     const [answers] = await dbConnection.query(
-      "SELECT * FROM answers WHERE questionid = ?",
+      "SELECT users.username, answers.answer FROM users JOIN answers ON answers.userid = users.userid WHERE answers.questionid = ?",
       [questionid]
     );
 

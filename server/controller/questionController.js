@@ -1,10 +1,11 @@
 const dbConnection = require("../db/dbConfig");
 const { StatusCodes } = require("http-status-codes");
-const crypto = require("crypto");
+// const crypto = require("crypto");
+const { v4: uuidv4 } = require("uuid");
 
 async function askQuestion(req, res) {
   const { title, description } = req.body;
-  const questionid = crypto.randomUUID();
+  const questionid = uuidv4();
   const userid = req.user.userid;
 
   if (!title || !description) {
@@ -32,7 +33,7 @@ async function askQuestion(req, res) {
 async function getAllQuestions(req, res) {
   try {
     const [questions] = await dbConnection.query(
-      " SELECT questionid, title, description, userid FROM questions"
+      `SELECT users.userid, users.username, questions.title,questions.questionid, questions.description FROM users JOIN questions ON users.userid = questions.userid ORDER BY id DESC;`
     );
 
     if (questions.length === 0) {
@@ -51,12 +52,16 @@ async function getAllQuestions(req, res) {
 }
 
 async function getSingleQuestion(req, res) {
-  const { question_id } = req.params;
+  const { questionid } = req.params;
 
   try {
     const [question] = await dbConnection.query(
-      "SELECT * FROM questions WHERE questionid = ?",
-      [question_id]
+      `SELECT users.username, questions.title, questions.questionid, questions.description 
+      FROM users 
+      JOIN questions ON users.userid = questions.userid 
+      WHERE questions.questionid = ?;
+    `,
+      [questionid]
     );
 
     if (question.length === 0) {
