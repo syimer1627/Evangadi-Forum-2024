@@ -1,10 +1,9 @@
-.homp{
+.homepage{
     margin-top: 84px;
 }
-.hed{
+.head{
     padding-top: 45px;
 }
-
 
 .qb{
     background-color:#516CF0!important ;
@@ -12,11 +11,11 @@
     height: 40px;
      border: none;
      border-radius: 5px;
+     color: #fff;
 }
-.question:hover{ 
+.qb:hover{ 
     background-color: #FE8402!important;
-    border: #FE8402!important;
 }
 .askque{
-margin-bottom: 20px;
+  margin-bottom: 20px;
 }

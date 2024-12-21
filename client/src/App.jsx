@@ -1,9 +1,10 @@
 import React from "react";
-import Footer from "./Components/Footer/Footer";
+import Routing from "./Router";
+
 function App() {
   return (
     <div>
-      <Footer />
+      <Routing />
     </div>
   );
 }

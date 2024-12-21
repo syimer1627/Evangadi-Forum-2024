@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import styles from "./Header.module.css"; 
+import styles from "./Header.module.css";
 import logo from "../../assets/logo0.png";
 import MenuIcon from "@mui/icons-material/Menu";
 import { Link } from "react-router-dom";
@@ -8,7 +8,8 @@ import { AppState } from "../../Router";
 function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
 
-  const { handleLogout, user } = useContext(AppState); 
+  const { handleLogout } = useContext(AppState);
+
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
   };
@@ -39,11 +40,7 @@ function Header() {
             </div>
           </div>
           <div
-            className={`${
-              styles.header_navlist
-            } col mx-auto d-none d-md-block d-lg-block ${
-              menuOpen ? "active" : ""
-            }`}
+            className={`${styles.header_navlist} col mx-auto d-none d-md-block d-lg-block`}
           >
             <div className="d-flex gap-5 justify-content-end align-items-center">
               <div className="gap-3 d-flex">

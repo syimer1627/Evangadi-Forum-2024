@@ -14,6 +14,6 @@ router.post("/", askQuestion);
 router.get("/", getAllQuestions);
 
 // Get a single question by ID
-router.get("/:question_id", getSingleQuestion);
+router.get("/:questionid", getSingleQuestion);
 
 module.exports = router;

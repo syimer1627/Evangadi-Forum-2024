@@ -15,10 +15,8 @@ function AskQuestions() {
   });
 
   console.log(form);
-  
-  const navigate = useNavigate();
 
-  // const axios = axiosBase();
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setForm((pre) => ({ ...pre, [e.target.name]: e.target.value }));
@@ -32,7 +30,7 @@ function AskQuestions() {
     }
 
     try {
-      await axiosBase.post("/questions/", form, {...headerToken});
+      await axiosBase.post("/questions/", form, { ...headerToken });
 
       navigate("/");
     } catch (error) {
@@ -114,4 +112,3 @@ function AskQuestions() {
 }
 
 export default AskQuestions;
-
