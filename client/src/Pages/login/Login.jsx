@@ -1,5 +1,4 @@
-
-import { useState, useRef } from "react";
+import { useState } from "react";
 import axios from "../../axiosConfig";
 import { Link, useNavigate } from "react-router-dom";
 import Layout from "../../Components/Layout/Layout";
@@ -8,29 +7,26 @@ import "./register.css";
 
 function Login() {
   const navigate = useNavigate();
-  const emailRef = useRef();
-  const passwordRef = useRef();
-  const usernameRef = useRef();
-  const firstnameRef = useRef();
-  const lastnameRef = useRef();
-  const emailRefR = useRef();
-  const passwordRefR = useRef();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showHide, setShowHide] = useState(true);
   const [errorMsg, setErrorMsg] = useState("");
 
+  const [registerForm, setRegisterForm] = useState({
+    username: "",
+    firstname: "",
+    lastname: "",
+    email: "",
+    password: "",
+  });
 
   const border = () => {
-    emailDom.current.style.border = "  1px solid #999";
-    passwordDom.current.style.border = "  1px solid #999";
-    usernameDom.current.style.border = "  1px solid #999";
-    firstnameDom.current.style.border = "  1px solid #999";
-    lastnameDom.current.style.border = "  1px solid #999";
-    emailDomR.current.style.border = "  1px solid #999";
-    passwordDomR.current.style.border = "  1px solid #999";
+    document.querySelectorAll("input").forEach((input) => {
+      input.style.border = "1px solid #999";
+    });
   };
+
   const handleToggle = () => setShowHide(!showHide);
 
   const handleLogin = async (e) => {
@@ -46,7 +42,7 @@ function Login() {
         email,
         password,
       });
-      localStorage.setItem("token", response.data.token); 
+      localStorage.setItem("token", response.data.token);
       console.log("Token stored:", response.data.token);
       navigate("/");
     } catch (error) {
@@ -57,41 +53,35 @@ function Login() {
     }
   };
 
-
   const handleRegister = async (e) => {
     e.preventDefault();
     setErrorMsg("");
 
-    const usernameValue = usernameRef.current.value;
-    const firstNameValue = firstnameRef.current.value;
-    const lastNameValue = lastnameRef.current.value;
-    const emailValue = emailRefR.current.value;
-    const passValue = passwordRefR.current.value;
+    const { username, firstname, lastname, email, password } = registerForm;
 
-    if (
-      !usernameValue ||
-      !firstNameValue ||
-      !lastNameValue ||
-      !emailValue ||
-      !passValue
-    ) {
+    if (!username || !firstname || !lastname || !email || !password) {
       setErrorMsg("Please provide all required information.");
       return;
     }
 
     try {
       await axios.post("/users/register", {
-        username: usernameValue,
-        firstname: firstNameValue,
-        lastname: lastNameValue,
-        email: emailValue,
-        password: passValue,
+        username,
+        firstname,
+        lastname,
+        email,
+        password,
       });
       setErrorMsg("Registration successful! Please log in.");
-      handleToggle(); 
+      handleToggle();
     } catch (error) {
       setErrorMsg(error.response?.data?.msg || "Registration failed.");
     }
+  };
+
+  const handleRegisterChange = (e) => {
+    const { name, value } = e.target;
+    setRegisterForm((prevForm) => ({ ...prevForm, [name]: value }));
   };
 
   return (
@@ -130,7 +120,6 @@ function Login() {
                         <div>
                           <input
                             className="login_email"
-                            ref={emailRef}
                             type="email"
                             name="email"
                             placeholder="Enter Your Email"
@@ -144,7 +133,6 @@ function Login() {
                         <div>
                           <input
                             className="login_password"
-                            ref={passwordRef}
                             type="password"
                             name="password"
                             placeholder="Enter Your Password"
@@ -188,9 +176,11 @@ function Login() {
                           <div>
                             <input
                               className="register_email"
-                              ref={emailRefR}
                               type="email"
+                              name="email"
                               placeholder="Email"
+                              value={registerForm.email}
+                              onChange={handleRegisterChange}
                               onFocus={border}
                             />
                           </div>
@@ -200,9 +190,11 @@ function Login() {
                             <div>
                               <input
                                 className="register_first"
-                                ref={firstnameRef}
                                 type="text"
+                                name="firstname"
                                 placeholder="First Name"
+                                value={registerForm.firstname}
+                                onChange={handleRegisterChange}
                                 onFocus={border}
                               />
                             </div>
@@ -210,9 +202,11 @@ function Login() {
                             <div>
                               <input
                                 className="register_last"
-                                ref={lastnameRef}
                                 type="text"
+                                name="lastname"
                                 placeholder="Last Name"
+                                value={registerForm.lastname}
+                                onChange={handleRegisterChange}
                                 onFocus={border}
                               />
                             </div>
@@ -221,9 +215,11 @@ function Login() {
                           <div>
                             <input
                               className="register_user"
-                              ref={usernameRef}
                               type="text"
+                              name="username"
                               placeholder="Username"
+                              value={registerForm.username}
+                              onChange={handleRegisterChange}
                               onFocus={border}
                             />
                           </div>
@@ -232,15 +228,17 @@ function Login() {
                           <div>
                             <input
                               className="register_password"
-                              ref={passwordRefR}
                               type="password"
+                              name="password"
                               placeholder="Password"
+                              value={registerForm.password}
+                              onChange={handleRegisterChange}
                               onFocus={border}
                             />
                           </div>
 
                           <br />
-                          
+
                           <button type="submit">Agree and Join</button>
                           <small>
                             I agree to the <Link to="#">privacy policy</Link>

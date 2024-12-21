@@ -8,11 +8,8 @@ import { useNavigate } from "react-router-dom";
 
 function Homepage() {
   const [userData] = useContext(UserContext);
-  const [filteredQuestions, setFilteredQuestions] = useState([]);
   const [questions, setQuestions] = useState([]);
-  const [error, setError] = useState(null);
   const navigate = useNavigate();
-  const [search, setSearch] = useState("");
 
   const fetchQuestions = async () => {
     try {
@@ -24,30 +21,23 @@ function Homepage() {
         params: { userid: userData.userid },
       });
       setQuestions(response.data.questions);
-      console.log(response.data.questions); // Check the response structure
+      console.log(response.data.questions);
     } catch (error) {
       console.error(error);
-      // Handle error
     }
   };
 
   useEffect(() => {
-    fetchQuestions();
-  }, []);
-
-  useEffect(() => {
-    setFilteredQuestions(
-      questions?.filter((q) =>
-        q?.title.toLowerCase().includes(search.toLowerCase())
-      )
-    );
-  }, [search, questions]);
+    if (userData?.userid) {
+      fetchQuestions();
+    }
+  }, [userData]);
 
   return (
     <Layout>
       <div className="container">
-        <div className="homp">
-          <div className="hed">
+        <div className="homepage">
+          <div className="head">
             <div className="row askque">
               <div className="col-md-6">
                 <button className="qb" onClick={() => navigate("/question")}>
@@ -64,7 +54,7 @@ function Homepage() {
           <h3 className="ns">Questions</h3>
         </div>
         <div>
-          {filteredQuestions.map((question) => (
+          {questions?.map((question) => (
             <QuestionDetail question={question} key={question.id} />
           ))}
         </div>

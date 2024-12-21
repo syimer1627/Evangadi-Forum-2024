@@ -3,18 +3,17 @@ import "./Answer.css";
 import { BsPersonCircle } from "react-icons/bs";
 import styles from "../Question/AskQuestions.module.css";
 import Layout from "../../Components/Layout/Layout";
-import {  Link, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { AppState } from "../../Router";
 import axiosBase from "../../axiosConfig";
 function Answer() {
-  const { questionid } = useParams(); 
+  const { questionid } = useParams();
   const [answers, setAnswers] = useState([]);
   const [newAnswer, setNewAnswer] = useState("");
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
   const [data, setData] = useState({});
   const token = localStorage.getItem("token");
-  const { user } = useContext(AppState);
+  const { userData } = useContext(AppState);
 
   // Create header token object
   const headerToken = { Authorization: `Bearer ${token}` };
@@ -26,13 +25,10 @@ function Answer() {
         const response = await axiosBase.get(`questions/${questionid}`, {
           headers: headerToken,
         });
-
-        // Set the retrieved question data
-        setData(response.data.question || {});
+        setData(response.data.question);
         setIsLoading(false);
       } catch (err) {
         console.error("Error fetching question: ", err);
-        setError("Failed to fetch question data.");
         setIsLoading(false);
       }
     };
@@ -50,7 +46,6 @@ function Answer() {
         setAnswers(response.data.answers || []);
       } catch (err) {
         console.error("Error fetching answers: ", err);
-        setError("Failed to fetch answers.");
       }
     };
 
@@ -60,12 +55,12 @@ function Answer() {
   // Submit a new answer
   const submitAnswer = async (e) => {
     e.preventDefault();
-    if (newAnswer.trim()) {
+    if (newAnswer) {
       try {
         const response = await axiosBase.post(
           `/answers/`,
           {
-            userid: user?.userid,
+            Dataid: userData?.userid,
             questionid: questionid,
             answer: newAnswer,
           },
@@ -74,12 +69,13 @@ function Answer() {
           }
         );
 
-        const postedAnswer = response.data; 
+        const postedAnswer = response.data;
+        // console.log(response.data);
+
         setAnswers((prevAnswers) => [...prevAnswers, postedAnswer]);
-        setNewAnswer(""); 
+        setNewAnswer("");
       } catch (error) {
         console.error("Error posting answer: ", error);
-        setError("Failed to post the answer. Please try again.");
       }
     }
   };
@@ -145,4 +141,3 @@ function Answer() {
   );
 }
 export default Answer;
-

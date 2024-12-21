@@ -1,32 +1,32 @@
-import { Routes, Route, useNavigate } from 'react-router-dom';
-import AskQuestions from './Pages/Question/AskQuestions';
-import Answer from './Pages/Q&A/Answer';
-import Login from './Pages/login/login';
-import NotFound from './Pages/NotFound/NotFound';
-import Homepage from './Pages/Home/Home';
-import React, { useEffect, useContext, createContext } from 'react';
+import { Routes, Route, useNavigate } from "react-router-dom";
+import AskQuestions from "./Pages/Question/AskQuestions";
+import Answer from "./Pages/Q&A/Answer";
+import Login from "./Pages/login/login";
+import NotFound from "./Pages/NotFound/NotFound";
+import Homepage from "./Pages/Home/Home";
+import React, { useEffect, useContext } from "react";
+import { createContext } from "react";
 
-import axios from './axiosConfig';
-import { UserContext } from './Components/Dataprovide/DataProvider';
-import HowItWorks from './Pages/HowItWorks/HowItWorks';
-import ProtectedRoute from './Components/ProtectedRoute/ProtectedRoute';
+import axios from "./axiosConfig";
+import { UserContext } from "./Components/Dataprovide/DataProvider";
+import HowItWorks from "./Pages/HowItWorks/HowItWorks";
+import ProtectedRoute from "./Components/ProtectedRoute/ProtectedRoute";
 export const AppState = createContext();
 function Routing() {
   const [userData, setUserData] = useContext(UserContext);
-  const [user, setUser] = useContext(UserContext);
 
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem("token");
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
+    localStorage.removeItem("token");
 
-    localStorage.removeItem('username');
-    localStorage.removeItem('userid');
+    localStorage.removeItem("username");
+    localStorage.removeItem("userid");
 
-    setUser(null);
+    setUserData(null);
 
-    navigate('/login');
+    navigate("/login");
   };
 
   const headerToken = {
@@ -36,33 +36,32 @@ function Routing() {
   };
 
   const checkUser = async () => {
-    console.log('Token being sent:', token);
+    console.log("Token being sent:", token);
     try {
-      const response = await axios.get('/users/check', {
+      const response = await axios.get("/users/check", {
         ...headerToken,
       });
-      console.log('User data received:', response.data);
+      console.log("User data received:", response.data);
       setUserData(response.data);
-      setUser(response.data);
     } catch (error) {
       console.error(
-        'Error fetching user data:',
+        "Error fetching user data:",
         error.response ? error.response.data : error.message
       );
-      navigate('/login');
+      navigate("/login");
     }
   };
   useEffect(() => {
     if (token) {
       checkUser();
     } else {
-      navigate('/login');
+      navigate("/login");
     }
   }, [token]);
 
   return (
     <AppState.Provider
-      value={{ userData, setUserData, user, headerToken, handleLogout }}
+      value={{ userData, setUserData, headerToken, handleLogout }}
     >
       <Routes>
         {/* <Route path="/" element={<Login />} /> */}

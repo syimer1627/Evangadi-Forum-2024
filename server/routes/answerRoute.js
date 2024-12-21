@@ -10,6 +10,6 @@ const router = express.Router();
 router.post("/", authMiddleware, postAnswer);
 
 // Get all answers for a specific question
-router.get("/:question_id", authMiddleware, getAnswersForQuestion);
+router.get("/:questionid", authMiddleware, getAnswersForQuestion);
 
 module.exports = router;
