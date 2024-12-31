@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express();
-const port = 5550;
+const port = 7000;
 
 const cors = require("cors");
 app.use(cors());
@@ -20,14 +20,17 @@ const answersRoutes = require("./routes/answerRoute");
 //json middleware to extract json data
 app.use(express.json());
 
+
+
 // user route middleware
 app.use("/api/users", UserRoutes);
 //questions routes middleware
 app.use("/api/questions", authMiddleware, questionsRoutes);
 
 //answer routes middleware
-
 app.use("/api/answers", authMiddleware, answersRoutes);
+
+
 
 async function start() {
   try {

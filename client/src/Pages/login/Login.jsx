@@ -6,14 +6,14 @@ import "./login.css";
 import "./register.css";
 
 function Login() {
-  const navigate = useNavigate();
 
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showHide, setShowHide] = useState(true);
   const [errorMsg, setErrorMsg] = useState("");
-
   const [registerForm, setRegisterForm] = useState({
+    
     username: "",
     firstname: "",
     lastname: "",

@@ -1,0 +1,95 @@
+Login Workflow
+Form Fields:
+
+The user inputs their email and password into the login form.
+Validation:
+
+When the form is submitted, the handleLogin function checks if both email and password fields are filled. If not, an error message is displayed.
+API Request:
+
+The entered credentials are sent to the backend API endpoint /users/login using Axios.
+Response Handling:
+
+Success:
+The API returns a token, which is stored in localStorage for subsequent authenticated requests.
+The user is navigated to the homepage using useNavigate().
+Failure:
+If the API returns an error (e.g., invalid credentials), an error message is displayed to the user.
+
+
+
+Registration Workflow
+Form Fields:
+
+The user fills in their username, first name, last name, email, and password.
+Validation:
+
+The handleRegister function validates that all fields are filled. If any field is missing, an error message is displayed.
+API Request:
+
+The data is sent to the backend API endpoint /users/register using Axios.
+Response Handling:
+
+Success:
+If the registration is successful, a success message is displayed, prompting the user to log in.
+The form switches back to the login view (handleToggle()).
+Failure:
+If an error occurs (e.g., email already exists), the error message from the backend is displayed.
+
+
+
+
+
+
+askQuestion flow 
+
+Workflow Explanation
+Initialization and Context
+
+The AskQuestions component uses the useContext hook to access the AppState context, which contains userData and headerToken. These provide the user's information and authentication token, respectively.
+The initial state of the form is set using useState, pre-filling the userid field from the user's data (userData?.userid) and initializing empty strings for the title and description fields.
+Rendering Form
+
+The component renders a form where users can input:
+Title: A brief summary of the question.
+Description: A detailed explanation of the question.
+The form is styled using CSS modules (styles.question_*).
+Handling Input Changes
+
+The handleChange function updates the form state dynamically as the user types into the input fields (title and description).
+It uses the name attribute of the input fields to update the corresponding field in the state.
+Submitting the Form
+
+When the user clicks the "Post Your Question" button, the handleSubmit function is triggered.
+Validation:
+Checks if the userid exists in userData.
+If not, logs a message indicating the issue and stops the submission process.
+API Request:
+Sends a POST request to the /questions/ endpoint using axiosBase, passing the form data and the headerToken for authentication.
+Navigation:
+On a successful request, the user is navigated back to the homepage using useNavigate.
+Error Handling
+
+If the API request fails, the error is logged to the console (you can expand this to display a message to the user).
+Guidance for Users
+
+The component provides a step-by-step guide on how to write a good question, displayed in the question_steps section, using icons (IoIosCheckmarkCircle) and helpful instructions.
+Navigation Links
+
+The user can navigate back to the main questions page via a link (Go to Question Page).
+
+
+
+Component Workflow in Words
+The user navigates to the "Ask a Question" page.
+The form is pre-filled with the user's ID (userid) and awaits input for the question title and description.
+As the user types into the form, their inputs are dynamically updated in the component's state.
+When the user submits the form:
+The application checks if the user is authenticated (has a valid userid).
+The question data (including the user's ID) is sent to the backend via an authenticated API request.
+If the request succeeds, the user is redirected to the homepage where their question should now be visible.
+If there's an issue (e.g., missing authentication or API failure), appropriate error handling ensures smooth user feedback (currently via console logs).
+
+
+
+useContext() = React HOokthat allows you to share values between multiple levels of components without passing props therough each levels

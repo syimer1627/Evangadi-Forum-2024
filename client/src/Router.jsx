@@ -1,7 +1,7 @@
 import { Routes, Route, useNavigate } from "react-router-dom";
 import AskQuestions from "./Pages/Question/AskQuestions";
 import Answer from "./Pages/Q&A/Answer";
-import Login from "./Pages/login/login";
+import Login from "./Pages/login/Login";
 import NotFound from "./Pages/NotFound/NotFound";
 import Homepage from "./Pages/Home/Home";
 import React, { useEffect, useContext } from "react";
