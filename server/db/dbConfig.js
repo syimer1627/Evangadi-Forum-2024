@@ -1,18 +1,14 @@
+
+require('dotenv').config();
+
 const mysql2 = require("mysql2");
+
 const dbConnection = mysql2.createPool({
-  user: "evangadi",
-  database: "evangadidb",
-  host: "localhost",
-  password: "evangadi",
+  user: process.env.DB_USER,          // Use environment variables
+  database: process.env.DB_NAME,      // Use environment variables
+  host: process.env.DB_HOST,          // Use environment variables
+  password: process.env.DB_PASSWORD,  // Use environment variables
   connectionLimit: 10,
 });
 
-
-// dbConnection.execute("select 'test'", (err, result) => {
-//   if (err) {
-//     console.log(err.message);
-//   } else {
-//     console.log(result);
-//   }
-// });
- module.exports = dbConnection.promise();
+module.exports = dbConnection.promise();
